@@ -1,13 +1,14 @@
-<h1> Honeypot In Azure </h1>
+<h1> Sentinel attack monitoring on Honeypot </h1>
 
 <h2>Description</h2>
 
-This repo includes tutorial to setup AzureSentinel (SIEM) in azure. I then demonstrate how to create a honeypot in azure and setup log analytics to get logs of all the attacks being done on the machine. 
-I also created alerts to get IPs which are performing brute force attack on the honeypot
+This repo includes tutorial to setup AzureSentinel (SIEM) in azure. I then demonstrate how to create a honeypot in azure and setup log analytics to set up continous monitoring of the vm. 
+I then set up incident alert in Sentinel to get IPs which are performing brute force attack on the honeypot
 
 <h2>Languages and Utilities Used</h2>
 <h4> Languages: </h4>
 - Powershell<br/>
+- Kusto Query Language (KQL)<br/>
 <h4> Utilities: </h4>
 - Azure Sentinel (SIEM)<br/>
 - Microsoft Log Analytics <br/>
