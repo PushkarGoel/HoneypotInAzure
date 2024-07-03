@@ -1,4 +1,4 @@
-<h1> HoneypotInAzure </h1>
+<h1> Honeypot In Azure </h1>
 
 <h2>Description</h2>
 
@@ -35,14 +35,13 @@ I also created alerts to get IPs which are performing brute force attack on the 
    
    2.6  Go to Networking tab. I created a new Network security group as I wanted to be no restrictions in the access for the VM ( so that its a honeypot!).
 
+    -    Click on Advanced option for NIC network security group. Then click on Create new, and then add an inbound rule
    
-        Click on Advanced option for NIC network security group. Then click on Create new, and then add an inbound rule
+    -    Then change the Destination port ranges to *. Priority should be something closer to 1000. I chose 1010.
    
-        Then change the Destination port ranges to *. Priority should be something closer to 1000. I chose 1010.
-   
-        <img src="https://i.imgur.com/OVQR57G.png" height="80%" width="80%" alt="HONEYPOT LAB"/> <br/>
+    -   <img src="https://i.imgur.com/OVQR57G.png" height="80%" width="80%" alt="HONEYPOT LAB"/> <br/>
 
-        Click on Add button. Then Go to Review + Create and the VM should be started
+    -   Click on Add button. Then Go to Review + Create and the VM should be started
 
 3. Then I created a log analytic workspace so that I could analyze the traffic of deployed vm. To do that, follow these steps:
    
@@ -59,5 +58,32 @@ I also created alerts to get IPs which are performing brute force attack on the 
    4.2  Go to defender plans and set plan for servers to On ( SQL server can remain off as we dont need them for the lab)
 
    4.3  Go to data collection and set events as All Events
-   
+
+5. Go to the log analytics workspace and then add the vm to that so that the logs from vm are send to the logs analytics workspace
+
+6.  Add Sentinel workspace to the workspace, by creating sentinel workspace in the same resource group as the vm
+
+    Now Sentinel is set up on the system, and the vm would act as a honeypot for attackers  as anyone from internet can access it
+
+8.  To analyze the brute force attempts on the vm, I created an alert  for check for brute force attempts through the query. To do this, follow the steps:
+
+    8.1 Go to "Analytics" under the "Configuration" section in sentinel
+
+    8.2 Click on "+ Create" and select "Scheduled query rule"
+
+    8.3 Create a rule with name "Brute force attempt on RDP". Set the rule logic using the query
+
+         SecurityEvent | where EventID == 4625 and LogonType == 10  // RDP Logon Type is 10
+
+         | summarize FailedAttempts = count() by TargetUserName, TargetUserSid, SourceIpAddress, bin(TimeGenerated, 5m);
+
+    8.4 Create Incident , with severity as high
+
+Now, you can check any brute force attempt on the vm by going to the incidents section of sentinel. We can create customised incident alerts using similar KQL queries
+
+Thus, we have sucessfully set up Microsoft Sentinel on a honeypot in Azure, as well as create alert rules to check if any attack is performed on the honeypot
+    
+
+    
+
     
