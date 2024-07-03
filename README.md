@@ -65,21 +65,24 @@ I also created alerts to get IPs which are performing brute force attack on the 
 
     Now Sentinel is set up on the system, and the vm would act as a honeypot for attackers  as anyone from internet can access it
 
-8.  To analyze the brute force attempts on the vm, I created an alert  for check for brute force attempts through the query. To do this, follow the steps:
+7.  To analyze the brute force attempts on the vm, I created an alert  for check for brute force attempts through the query. To do this, follow the steps:
 
-    8.1 Go to "Analytics" under the "Configuration" section in sentinel
+    7.1 Go to "Analytics" under the "Configuration" section in sentinel
 
-    8.2 Click on "+ Create" and select "Scheduled query rule"
+    7.2 Click on "+ Create" and select "Scheduled query rule"
 
-    8.3 Create a rule with name "Brute force attempt on RDP". Set the rule logic using the query
+    7.3 Create a rule with name "Brute force attempt on RDP". Set the rule logic using the query
 
          SecurityEvent | where EventID == 4625 and LogonType == 10  // RDP Logon Type is 10
 
          | summarize FailedAttempts = count() by TargetUserName, TargetUserSid, SourceIpAddress, bin(TimeGenerated, 5m);
 
-    8.4 Create Incident , with severity as high
+    7.4 Create Incident , with severity as high
 
 Now, you can check any brute force attempt on the vm by going to the incidents section of sentinel. We can create customised incident alerts using similar KQL queries
+
+
+<b> Conclusion </b> <br> <br>
 
 Thus, we have sucessfully set up Microsoft Sentinel on a honeypot in Azure, as well as create alert rules to check if any attack is performed on the honeypot
     
